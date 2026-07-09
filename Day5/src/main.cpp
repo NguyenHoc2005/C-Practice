@@ -1,86 +1,11 @@
 #include <iostream>
-#include <map>
-#include <string>
 #include <iomanip>
+#include "Device.hpp"
+#include <string>
+#include <map>
 #include <queue>
+
 using namespace std;
-
-class Device {
-    private:
-    string id;
-    string name;
-    bool connected = false;
-
-    public:
-    Device(string id, string name) : id(id), name(name){}
-
-    Device() = default;
-
-    //setter
-    void setID(string id){
-        if(!id.empty()){
-            this->id = id;
-        }
-    }
-
-    void setName(string name){
-        if(!name.empty()){
-            this->name = name;
-        }
-    }
-
-    void setConnected(){
-        if(connected == true){
-            this->connected = false;
-        } else {
-            this->connected = true;
-        }
-    }
-
-    //getter
-    string getID () const {
-        return id;
-    }
-
-    string getName () const {
-        return name;
-    }
-
-    bool getconnected() const {
-        return connected;
-    }
-
-    //function
-    void connect (){
-        if (connected == false){
-            setConnected();
-        }
-        cout << "Connected successfully!" << endl;
-    }
-
-    void disconnect(){
-        if (connected == true){
-            setConnected();
-        }
-        cout << "Disconnected successfully!" << endl;
-    }
-
-    string getconnectedtext() const {
-        if (getconnected()){
-            return "Connected";
-        } else {
-            return "Disconnected";
-        }
-    }
-
-    void printInfo() const {
-        cout << "\n|ID      | Name                 | Status                 |" << endl;
-        cout << "--------------------------------------------------------" << endl;
-        cout << left << setw(8) << id
-                << " | " << left << setw(20) << name
-                << " | " << left << setw(20) << connected << endl;
-    }
-};
 
 //Exem Map
 void showInfoDevice(const map<string, Device> &Lstdevices){
@@ -94,7 +19,7 @@ void showInfoDevice(const map<string, Device> &Lstdevices){
             const Device &dev = item.second;
             cout << left << setw(8) << dev.getID() 
                  << " | " << left << setw(20) << dev.getName() 
-                 << " | " << left << setw(20) << dev.getconnectedtext() << endl;
+                 << " | " << left << setw(20) << dev.getConnectedText() << endl;
         }
     }
 
@@ -245,26 +170,44 @@ void addtask(queue<string> &tasks){
 }
 
 void dotask(queue<string> &tasks){
+    if (tasks.empty()){
+        cout << "No task to do!" << endl;
+        return;
+    }
     cout << "Currently working: "<< tasks.front() << endl;
     tasks.pop();
     cout << "Task complete!" << endl;
 }
 
 void checktask(const queue<string> &tasks){
+    if (tasks.empty()){
+        cout << "No task to check!" << endl;
+        return;
+    }
     cout << "Task oldest: " << tasks.front() << endl;
 }
 
 void CountTask(queue<string> tasks){
+    if (tasks.empty()){
+        cout << "No task to count!" << endl;
+        return;
+    }
+    auto count = tasks.size();
     while (!tasks.empty()){
         cout << tasks.front() << endl;
         tasks.pop();
     }
+    cout << "Total task: " << count << endl;
 }
 
 int main() {
     map<string, Device> Listdevices;
     queue<string> Task;
     int choice;
+
+    Listdevices["dv1"] = Device("dv1", "Hieu Hoc");
+    Listdevices["dv2"] = Device("dv2", "John Doe");
+    Listdevices["dv3"] = Device("dv3", "Jane Smith");
 
     do {
         cout << "1. Add device" << endl;
